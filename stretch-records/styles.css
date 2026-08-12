@@ -1,0 +1,198 @@
+/* Stretch Records - Artists page (System Design starter, beginner build) */
+
+/* Page basics */
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  margin: 0;
+  font-family: "Inter", sans-serif;
+  background-color: #f3f2f2;
+  color: #201e1d;
+}
+
+a {
+  color: #ae1800;
+}
+
+a:hover {
+  color: #ec3013;
+}
+
+/* Header and footer */
+header,
+footer {
+  padding: 16px 32px;
+  border-bottom: 2px solid #b3b1b0;
+}
+
+footer {
+  border-bottom: none;
+  font-size: 13px;
+}
+
+.brand {
+  margin: 0;
+  font-weight: 800;
+  font-size: 15px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+}
+
+/* Small uppercase labels */
+.label {
+  font-size: 12px;
+  letter-spacing: 2px;
+  text-transform: uppercase;
+  color: #605d5d;
+  margin: 0 0 12px;
+}
+
+/* Intro block */
+.intro {
+  padding: 32px;
+  border-bottom: 2px solid #b3b1b0;
+}
+
+.intro h1 {
+  font-size: 64px;
+  font-weight: 800;
+  margin: 0 0 16px;
+}
+
+.intro p {
+  max-width: 600px;
+  line-height: 1.6;
+}
+
+/* Featured pick, written by the shuffle button */
+.feature-row {
+  margin-top: 24px;
+}
+
+.featured {
+  font-size: 19px;
+  font-weight: 700;
+  margin: 12px 0 0;
+  min-height: 1.4em;
+}
+
+/* The roster: artist cards rendered from data by script.js */
+.roster {
+  padding: 32px;
+  border-bottom: 2px solid #b3b1b0;
+}
+
+/* The loading and error line above the cards. Empty until code writes to it. */
+.status {
+  min-height: 1.4em;
+  margin: 0 0 12px;
+  color: #605d5d;
+}
+
+.cards {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 12px;
+}
+
+.cards article {
+  flex: 1 1 200px;
+  max-width: 300px;
+  border: 1px solid #b3b1b0;
+  background-color: #ffffff;
+  padding: 16px;
+}
+
+.cards article:hover {
+  border-color: #ec3013;
+}
+
+.cards img {
+  width: 96px;
+  height: 96px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 12px;
+}
+
+.cards h3 {
+  font-size: 19px;
+  font-weight: 800;
+  margin: 0 0 8px;
+  overflow-wrap: anywhere;
+}
+
+.cards p {
+  font-size: 13px;
+  text-transform: uppercase;
+  color: #605d5d;
+  margin: 0;
+}
+
+/* Suggest an artist form */
+.suggest {
+  padding: 32px;
+  border-bottom: 2px solid #b3b1b0;
+}
+
+.suggest h2 {
+  font-size: 36px;
+  font-weight: 800;
+  margin: 0 0 12px;
+}
+
+.suggest > p {
+  max-width: 500px;
+  line-height: 1.6;
+}
+
+.suggest form {
+  max-width: 400px;
+  margin-top: 24px;
+}
+
+.suggest label {
+  display: block;
+  font-size: 13px;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.suggest input {
+  width: 100%;
+  padding: 10px;
+  font-family: "Inter", sans-serif;
+  font-size: 15px;
+  border: 1px solid #b3b1b0;
+  background-color: #ffffff;
+  box-sizing: border-box;
+  margin-bottom: 12px;
+}
+
+/* Buttons */
+button {
+  padding: 12px 20px;
+  font-family: "Inter", sans-serif;
+  font-size: 14px;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  color: #ffffff;
+  background-color: #ec3013;
+  border: none;
+  cursor: pointer;
+}
+
+button:hover {
+  background-color: #ae1800;
+}
+
+/* Visible keyboard focus everywhere */
+a:focus,
+input:focus,
+button:focus {
+  outline: 2px solid #ec3013;
+  outline-offset: 2px;
+}

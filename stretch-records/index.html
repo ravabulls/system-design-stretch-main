@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="en" id="top">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Artists | Stretch Records</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap">
+<link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+<header>
+  <p class="brand">Stretch Records</p>
+</header>
+
+<section class="intro">
+  <p class="label">Artists</p>
+  <h1>The whole roster.</h1>
+  <p>Children's music, Italian pop, Afrobeats, hip-hop and country. Every artist on the label, rendered from data by the code you wrote last course.</p>
+  <div class="feature-row">
+    <button class="shuffle" type="button">Shuffle featured artist</button>
+    <p class="featured"></p>
+  </div>
+</section>
+
+<main class="roster">
+  <p class="label">The roster</p>
+  <p class="status" aria-live="polite"></p>
+  <div class="cards"></div>
+</main>
+
+<section class="suggest">
+  <h2>Suggest an artist.</h2>
+  <p>Know someone who belongs on the label? Add them to the roster.</p>
+  <form class="signup">
+    <label for="artist-name">Artist name</label>
+    <input id="artist-name" name="name" type="text" placeholder="Ada and the Engines">
+    <label for="artist-genre">Genre</label>
+    <input id="artist-genre" name="genre" type="text" placeholder="Synthwave">
+    <button type="submit">Add artist</button>
+  </form>
+</section>
+
+<footer>
+  <span>&copy; 2026 Stretch Records. All rights reserved.</span>
+  <a href="#top">Back to top</a>
+</footer>
+
+<script src="script.js"></script>
+</body>
+</html>
