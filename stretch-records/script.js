@@ -1,40 +1,8 @@
 'use strict';
 
-// The roster, exactly where the JavaScript course's finale left it: an array
-// of artist objects at the top of the file, and one repeatable rule that
-// renders it. In this course the data moves out of this file, step by step.
-const artists = [
-  {
-    name: 'Pinkfong',
-    genre: "Children's music",
-    total: '11:31',
-    photo: 'images/pinkfong.jpeg',
-  },
-  {
-    name: 'Adriano Celentano',
-    genre: 'Italian pop',
-    total: '20:52',
-    photo: 'images/adriano-celentano.jpg',
-  },
-  {
-    name: 'Asake',
-    genre: 'Afrobeats',
-    total: '14:08',
-    photo: 'images/asake.jpg',
-  },
-  {
-    name: 'Miyagi and Andy Panda',
-    genre: 'Hip-hop',
-    total: '16:21',
-    photo: 'images/miyagi-and-andy-panda.jpg',
-  },
-  {
-    name: 'Johnny Cash',
-    genre: 'Country',
-    total: '15:40',
-    photo: 'images/johnny-cash.jpg',
-  },
-];
+// The roster used to sit here as an array, exactly where the JavaScript
+// course's finale left it. It now lives in artists.json: the page requests
+// the data over the network and renders whatever comes back.
 
 const cardArea = document.querySelector('.cards');
 
@@ -68,7 +36,11 @@ function renderCards(list) {
   }
 }
 
-renderCards(artists);
+// Ask the server for the roster, turn the response body into an array,
+// and hand it to the same render rule as before.
+fetch('artists.json')
+  .then((response) => response.json())
+  .then((artists) => renderCards(artists));
 
 // Shuffle: pick a random artist and feature them.
 const shuffleButton = document.querySelector('.shuffle');
