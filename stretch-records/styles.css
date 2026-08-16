@@ -40,6 +40,13 @@ footer {
   text-transform: uppercase;
 }
 
+/* Lesson 4 step 7: label info, fetched from the second json-server. */
+.label-info {
+  margin: 4px 0 0;
+  font-size: 13px;
+  color: #605d5d;
+}
+
 /* Small uppercase labels */
 .label {
   font-size: 12px;
