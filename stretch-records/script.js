@@ -1,40 +1,8 @@
 'use strict';
 
-// The roster, exactly where the JavaScript course's finale left it: an array
-// of artist objects at the top of the file, and one repeatable rule that
-// renders it. In this course the data moves out of this file, step by step.
-const artists = [
-  {
-    name: 'Pinkfong',
-    genre: "Children's music",
-    total: '11:31',
-    photo: 'images/pinkfong.jpeg',
-  },
-  {
-    name: 'Adriano Celentano',
-    genre: 'Italian pop',
-    total: '20:52',
-    photo: 'images/adriano-celentano.jpg',
-  },
-  {
-    name: 'Asake',
-    genre: 'Afrobeats',
-    total: '14:08',
-    photo: 'images/asake.jpg',
-  },
-  {
-    name: 'Miyagi and Andy Panda',
-    genre: 'Hip-hop',
-    total: '16:21',
-    photo: 'images/miyagi-and-andy-panda.jpg',
-  },
-  {
-    name: 'Johnny Cash',
-    genre: 'Country',
-    total: '15:40',
-    photo: 'images/johnny-cash.jpg',
-  },
-];
+// The roster used to sit here as an array, exactly where the JavaScript
+// course's finale left it. It now lives in artists.json: the page requests
+// the data over the network and renders whatever comes back.
 
 const cardArea = document.querySelector('.cards');
 
@@ -68,7 +36,22 @@ function renderCards(list) {
   }
 }
 
-renderCards(artists);
+// Ask the server for the roster, turn the response body into an array, and
+// hand it to the same render rule as before. A setTimeout stands in for a
+// slow connection: the fetch itself is fast, but the render is held back two
+// seconds so the loading message has something real to cover. The message
+// clears the instant the cards actually appear, not before.
+const statusMessage = document.querySelector('.status');
+statusMessage.textContent = 'Loading artists…';
+
+fetch('artists.json')
+  .then((response) => response.json())
+  .then((artists) => {
+    setTimeout(() => {
+      renderCards(artists);
+      statusMessage.textContent = '';
+    }, 2000);
+  });
 
 // Shuffle: pick a random artist and feature them.
 const shuffleButton = document.querySelector('.shuffle');
@@ -79,6 +62,22 @@ shuffleButton.addEventListener('click', () => {
   document.querySelector('.featured').textContent =
     `Featured today: ${pick.name}`;
 });
+
+// Freeze: a deliberately blocking loop, for Lesson 2 step 3 only. It does not
+// await or yield, so it holds the single call stack for its whole run.
+// Nothing else, not a click, not a repaint, not a timer, can happen until it
+// returns control. Kept as a comment after the freeze was observed; see
+// lesson-02.js for what happened while it ran.
+//
+// const freezeButton = document.querySelector('.freeze');
+//
+// freezeButton.addEventListener('click', () => {
+//   const start = Date.now();
+//   while (Date.now() - start < 3000) {
+//     // busy-wait: burn CPU on purpose, hand nothing back to the event loop
+//   }
+//   console.log('freeze done');
+// });
 
 // The suggestion form: an empty submission does nothing, because an empty
 // string is falsy.
