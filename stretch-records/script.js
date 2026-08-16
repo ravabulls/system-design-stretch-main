@@ -84,16 +84,60 @@ class MissingArtistDataError extends Error {
   }
 }
 
-async function loadArtists() {
+// Lesson 4: the roster now lives behind a real server, run with
+// npx json-server artists.json --port 3000, instead of a static file.
+const artistsEndpoint = "http://localhost:3000/artists";
+
+// Step 7: the label's own information lives behind a second, independent
+// server, run with npx json-server label.json --port 3001. label.json's
+// top level is a single object, not an array, so json-server serves it as
+// one resource at /label instead of a collection.
+const labelEndpoint = "http://localhost:3001/label";
+const labelInfo = document.querySelector(".label-info");
+
+async function loadPage() {
   try {
-    const response = await fetch("artists.json");
-    const artists = await response.json();
+    // Both requests fire together, not one after the other, and
+    // Promise.all waits for both before anything below it runs, so the
+    // page renders once, only once both servers have actually answered.
+    const [artistsResponse, labelResponse] = await Promise.all([
+      fetch(artistsEndpoint),
+      fetch(labelEndpoint),
+    ]);
+    // Step 3: log the Response object itself, before parsing anything.
+    console.log(artistsResponse);
+    console.log(
+      "ok:", artistsResponse.ok,
+      "status:", artistsResponse.status,
+      "Access-Control-Allow-Origin:", artistsResponse.headers.get("Access-Control-Allow-Origin")
+    );
+    // Step 4: fetch does not reject on a 404 or any other HTTP error
+    // status, only on a real network failure, so ok has to be checked by
+    // hand and turned into a real thrown Error, one that carries the
+    // status, or a failed request would fall through and try to parse and
+    // render whatever error body the server sent back. Both responses get
+    // the same check; either server failing should fail the whole page,
+    // since the header has nothing true to say without the label data, and
+    // the roster has nothing to sit under without it either.
+    if (!artistsResponse.ok) {
+      throw new Error(
+        `Request to ${artistsEndpoint} failed with status ${artistsResponse.status}`
+      );
+    }
+    if (!labelResponse.ok) {
+      throw new Error(
+        `Request to ${labelEndpoint} failed with status ${labelResponse.status}`
+      );
+    }
+    const artists = await artistsResponse.json();
+    const label = await labelResponse.json();
     await wait(2000);
     if (artists.length === 0) {
       throw new MissingArtistDataError(
         "There are no artists on the roster right now. Please check back soon."
       );
     }
+    labelInfo.textContent = `${label.city} · Founded ${label.founded} · "${label.motto}"`;
     renderCards(artists);
   } catch (error) {
     // A visitor does not need to know this was a fetch, a parse, or an
@@ -119,7 +163,7 @@ async function loadArtists() {
   }
 }
 
-loadArtists();
+loadPage();
 
 // Shuffle: pick a random artist and feature them.
 const shuffleButton = document.querySelector(".shuffle");
@@ -148,18 +192,34 @@ shuffleButton.addEventListener("click", () => {
 // });
 
 // The suggestion form: an empty submission does nothing, because an empty
-// string is falsy.
+// string is falsy. Step 6: submitting now sends a real POST to the same
+// json-server endpoint the roster was loaded from, with a Content-Type
+// header so the server knows to parse the body as JSON, and the body
+// itself built with JSON.stringify, the same round trip Lesson 1 proved by
+// hand. The card is built from what the server sends back, not from the
+// form values directly, so it carries the id the server assigned.
 const form = document.querySelector(".signup");
 const nameInput = document.querySelector("#artist-name");
 const genreInput = document.querySelector("#artist-genre");
 
-form.addEventListener("submit", (event) => {
+form.addEventListener("submit", async (event) => {
   event.preventDefault();
   const name = nameInput.value;
   if (name) {
     const genre = genreInput.value || "Unsigned";
-    renderCards([{ name: name, genre: genre, total: "0:00" }]);
-    nameInput.value = "";
-    genreInput.value = "";
+    try {
+      const response = await fetch(artistsEndpoint, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify({ name: name, genre: genre, total: "0:00" }),
+      });
+      console.log("POST status:", response.status);
+      const saved = await response.json();
+      renderCards([saved]);
+      nameInput.value = "";
+      genreInput.value = "";
+    } catch (error) {
+      console.error(error);
+    }
   }
 });
